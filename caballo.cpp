@@ -1,52 +1,42 @@
-//Posible solucion alternativa
-//Codigo loureiro
 #include <iostream>
 #include <vector>
+#define tam 4
 using namespace std;
 
-#define tam 5
-int tab[tam][tam];
+
+int tab[tam][tam]={0};
+vector<int> h={2,1,-1,-2,-2,-1,1,2};
+vector<int> v={1,2,2,1,-1,-2,-2,-1};
 //////////////////////////////////////////////////////////
 void print_tab(){
     for (int  i = 0; i < tam; i++){
-        for (int  j = 0; j < tam; j++){
-            cout<<tab[i][j];
-        }
+        for (int  j = 0; j < tam; j++)
+            cout<<tab[i][j]<<"\t";
         cout<<"\n";
     }
 }
 //////////////////////////////////////////////////////////
-void caballo(int i, int x, int y, bool q=false){
-    int xn,yn,rn;
-    bool q1=true;
-    int m=-1;
-    vector<int> h={2,1,-1,-2,-2,-1,1,2};
-    vector<int> v={1,2,2,1,-1,-2,-2,-1};
-    while(q1 || m<8){
-        m++;
-        q1=false;
-        xn=x+h[m];
-        yn=x+v[m];
-        if(xn>0 && xn<tam){
-            if(tab[xn][yn]==0){
-                //cout<<"wa a pintar "<<xn<<yn<<endl;
-                tab[xn][yn]=i;
-                if(i<tam*tam){
-                    caballo(i+1,xn,yn,q1);
-                    if (!q1){
-                        tab[xn][yn]=0;
-                    }
-                }
-                else
-                    q1=true;
-            }
+bool caballo(int x, int y,int i){
+    //cout<<i<<endl;
+    if(i==tam*tam)
+        return true ;
+    for (int m=0; m < 8; m++){
+        int tx=h[m]+x;
+        int ty=v[m]+y;
+        if(tx>0 && tx<tam && ty>0 && ty<tam && tab[tx][ty]==0){
+           cout<<tx<<" "<<ty<<"- "<<i<<endl;
+            tab[tx][ty]=i;
+            if(caballo(tx,ty,i+1))
+                print_tab();
+            tab[tx][ty]=0;
         }
     }
-    q=q1;
+    return false;
 }
 //////////////////////////////////////////////////////////
 int main(){
-    caballo(1,0,0);
-    print_tab();
+    tab[1][0]=1;
+    cout<<caballo(1,0,2)<<endl; 
+    //print_tab();
     return 0;
 }
